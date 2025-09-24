@@ -11,8 +11,19 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Guías",
         "groups": [
+          {
+            "group": "Estandares",
+            "pages": [
+              {
+                "group": "Estilos para programar",
+                "pages": [
+                  "guides/standars/styles/php"
+                ]
+              }
+            ]
+          },
           {
             "group": "Getting started",
             "pages": [

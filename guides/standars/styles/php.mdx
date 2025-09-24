@@ -1,0 +1,146 @@
+---
+title: 'PHP'
+description: 'Esta guía define las buenas prácticas y el estilo de codificación para proyectos desarrollados en PHP. 
+El objetivo es mantener un código limpio y coherente, fácil de mantener y escalar, independientemente del equipo o proyecto.'
+icon: 'php'
+---
+
+## Fundamento PSR-12
+
+La base de esta guía es el estándar PSR-12, el cual define una extensión detallada del PSR-1 y PSR-2 para asegurar una estructura 
+consistente en todo el código PHP moderno.
+
+<h3>Reglas clave de PSR-12:</h3>
+
+- Todo archivo debe comenzar con `<?php` (sin etiqueta de cierre) `?>`.
+- Usar `declare(strict_types=1);` inmediatamente después de la etiqueta de apertura.
+- El archivo debe finalizar con una línea vacía (LF).
+
+## Estructura General del Archivo
+
+```php UserService.php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Models\User;
+
+class UserService
+{
+    public function register(string $email): User
+    {
+        // TO DO
+    }
+}
+```
+
+- Orden recomendado: `declare`, luego `namespace`, luego `use`, seguido de la clase.
+- Separar las secciones con una línea en blanco.
+
+## Convencciones de Nombres
+
+| Elemento | Convencción | Ejemplo |
+|-----------|-----------|-----------|
+| Clases | PascalCase | UserService |
+| Metodos | camelCase | getUserByEmail()  |
+| Variables | camelCase | $userEmail |
+| Constantes| UPPER_SNAKE_CASE | MAX_ENTRIES |
+| Archivos | PascalCase | UserController.php  |
+
+## Estilo y Formato de Código
+
+- **Indentación:** al utilizar una indentación continua facilitará la lectura e indicará visualmente si nos encontramos en el interior 
+    de una estructura concreta. Se usará una tabulación de 4 espacios.}
+    ```php Example.php
+    if(!Helpers::validateUuidV4($post['uuid'])){
+        return [
+            'success' => false,
+            'message' => 'Error en la petición, uuid no válido.'
+        ];
+    }
+    ```
+- **Longitud de línea:** máximo 120 caracteres. Inclusive si es línea de importación de archivos.
+- **Llaves:** al utilizar funciones, condicionales o ciclos la apertura de la llave estará en la misma línea.
+    ```php Example.php
+    public function myFunction(){
+        // TO DO
+    }
+
+    for($i = 0; $i < 0; $i++){
+        // TO DO
+    }
+
+    if(true){
+        // TO DO
+    }
+    ```
+- **Espacios:** No debe haber espacio entre el nombre de la función y el paréntesis al llamarla.
+- **Cadenas:** usar comillas simples por defecto, comillas dobles sólo si se necesita interpolación.
+- **Argumentos de métodos:** cuando se declara un tipo de retorno, debe haber un espacio después de los dos puntos, seguido de la declaración del tipo. 
+    Los dos puntos y la declaración deben estar en la misma línea que el paréntesis de cierre de la lista de argumentos, sin espacios entre ambos caracteres.
+    - Usar `?Tipo` si el valor puede ser `null`
+    ```php ReturnTypeVariations.php
+    <?php
+
+    declare(strict_types=1);
+
+    namespace Vendor\Package;
+
+    class ReturnTypeVariations
+    {
+        public function functionName(int $arg1, int $arg2): string
+        {
+            return 'foo';
+        }
+
+        public function anotherFunction(
+            string $foo,
+            string $bvar,
+            ?int $baz = null
+        ): ?string {
+            return 'foo';
+        }
+    }
+    ```
+
+## Importación de los Archivos
+
+Los archivos deben estructurarse de forma jerárquica y coherente: primero se definen las constantes y variables globales, 
+seguidas por variables de alcance limitado; luego se organizan las funciones principales que contienen la lógica central del módulo, 
+y finalmente se incluyen funciones auxiliares (helpers, triviales) que apoyan tareas específicas o reutilizables.
+
+```php Example.php
+
+// Clases base del sistema y excepciones globales
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+// DTOs
+use Src\App\User\Application\Dtos\ChangePasswordUserDto;
+use Src\App\User\Application\Dtos\DeleteUserDto;
+use Src\App\User\Application\Dtos\GetUserDto;
+
+// Enums y configuraciones
+use Src\Utils\Enums\Errors\Database;
+use Src\Utils\Enums\Roles\UserRoles;
+use Src\Utils\Enums\Status\UserStatus;
+```
+
+## Comentarios y Documentación
+
+- Usa comentarios sólo si el código no es autoexplicativo.
+- Prefiere nombres claros en funciones y variables antes de comentar.
+- Los comentarios deben ser concisos y actualizados.
+- PHPDoc solo si es necesario (cuando el tipado no sea posible o para mayor contexto):
+
+```php Example.php
+/**
+  * @param string $email
+  * @return User|null
+  */
+public function findUser(string $email): ?User;
+```
